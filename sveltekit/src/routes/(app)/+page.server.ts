@@ -16,7 +16,7 @@ import { CHATBOT_ENDPOINT_URL } from "$env/static/private";
 export const load = (async ({ locals }) => {
 	return {
         userSession: locals.userSession,
-        title: 'Demarcait',
+        title: 'Home',
         chatbotEndpointUrl: CHATBOT_ENDPOINT_URL,
     };
 }) satisfies PageServerLoad;

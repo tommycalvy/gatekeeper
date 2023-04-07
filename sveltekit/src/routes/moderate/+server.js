@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import { Configuration, OpenAIApi } from 'openai';
 import { OPENAI_API_KEY } from '$env/static/private';
-import { bestow, employee, segment, warn } from '$lib/gatekeeper.json';
+import { bestow, roles, segment, warn } from '$lib/gatekeeper.json';
 
 const configuration = new Configuration({
 	apiKey: OPENAI_API_KEY
@@ -11,7 +11,7 @@ const openai = new OpenAIApi(configuration);
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
 	const { prompt } = await request.json();
-    const gatekeeperPrompt = bestow + employee + segment + prompt + warn;
+    const gatekeeperPrompt = bestow + roles.employee + segment + prompt + warn;
     console.log('----------------------------------------------------');
     console.log('gatekeeperPrompt=', gatekeeperPrompt);
     console.log('----------------------------------------------------');

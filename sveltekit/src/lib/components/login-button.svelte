@@ -34,7 +34,7 @@
 		</div>
 		<div class="flex justify-center items-end gap-2 py-4">
 			<h1 class=" text-2xl font-bold">
-				Log in with your <span class="font-logo text-3xl text-sky-500">DemarcAIt</span> account
+				Log in with your <span class="font-logo text-3xl text-sky-500">demarcait</span> account
 			</h1>
 		</div>
 		<form action={ui.action} method="POST" enctype="application/x-www-form-urlencoded">

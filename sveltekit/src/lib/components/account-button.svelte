@@ -58,11 +58,6 @@
 			<div class="flex justify-center py-2">
 				<h1 class=" cursor-default">{userSession.username}</h1>
 			</div>
-			<li>
-				<a href="/profile" class="justify-between">
-					Profile
-				</a>
-			</li>
 			{#if verifyEmailUi && !userSession.verified}
 				<li>
 					<label for="modal-verify-email" class="w-full h-full text-start px-4 py-2 flex justify-between">
@@ -71,7 +66,12 @@
 					</label>
 				</li>
 			{/if}
-			<li><a href="/settings">Settings</a></li>
+			{#if userSession.admin}
+				<li>
+					<a href="/admin">Admin</a>
+				</li>
+			{/if}
+			<li><a href="/">Chat</a></li>
 			{#if logoutToken}
 				<li>
 					<form

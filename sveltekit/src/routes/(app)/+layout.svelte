@@ -16,9 +16,14 @@
 <div class="bg-base-300 w-screen h-screen">
 	<nav class="navbar bg-base-200 px-4 min-h-6 justify-between">
 		<div class="flex justify-start gap-4">
-			<a href="/"><h1 class="font-logo text-[1.75rem] text-sky-500">DemarcAIt</h1></a>
+			<a href="/"><h1 class="font-logo text-[1.75rem] text-sky-500">demarcait</h1></a>
+			<h1 class="text-2xl">{$page.data.title}</h1>
 		</div>
 		<div class="flex justify-end gap-4">
+			{#if data.userSession?.admin}
+			<a href="/admin/users"><button class="btn btn-sm">Users</button></a>
+            <a href="/admin/roles"><button class="btn btn-sm">Roles</button></a>
+			{/if}
 			{#if !data.user}
 				{#if $page.form}
 					{#if $page.form.loginUi}
