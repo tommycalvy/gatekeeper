@@ -1,26 +1,28 @@
 import { json } from '@sveltejs/kit';
 import { Configuration, OpenAIApi } from 'openai';
 import { OPENAI_API_KEY } from '$env/static/private';
+import { bestow, employee, warn } from '$lib/gatekeeper.json';
 
 const configuration = new Configuration({
-  apiKey: OPENAI_API_KEY,
+	apiKey: OPENAI_API_KEY
 });
 const openai = new OpenAIApi(configuration);
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
-  const { prompt } = await request.json();
-  console.log(prompt);
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: "Summarize this for a second-grade student:\n\nJupiter is the fifth planet from the Sun and the largest in the Solar System. It is a gas giant with a mass one-thousandth that of the Sun, but two-and-a-half times that of all the other planets in the Solar System combined. Jupiter is one of the brightest objects visible to the naked eye in the night sky, and has been known to ancient civilizations since before recorded history. It is named after the Roman god Jupiter.[19] When viewed from Earth, Jupiter can be bright enough for its reflected light to cast visible shadows,[20] and is on average the third-brightest natural object in the night sky after the Moon and Venus.",
-    temperature: 0.7,
-    max_tokens: 64,
-    top_p: 1.0,
-    frequency_penalty: 0.0,
-    presence_penalty: 0.0,
-  });
-  const moderatedPrompt = response.data.choices[0].text;
-  console.log(moderatedPrompt);
-  return json({ 'moderatedPrompt': moderatedPrompt});
+	const { prompt } = await request.json();
+    const gatekeeperPrompt = bestow + employee + warn + prompt;
+    console.log('gatekeeperPrompt=', gatekeeperPrompt);
+	const response = await openai.createCompletion({
+		model: 'text-davinci-003',
+		prompt: gatekeeperPrompt,
+		temperature: 0.6,
+		max_tokens: 2048,
+		top_p: 1.0,
+		frequency_penalty: 0.0,
+		presence_penalty: 0.0
+	});
+	const moderatedPrompt = response.data.choices[0].text;
+	console.log('moderatedPrompt=', moderatedPrompt);
+	return json({ moderatedPrompt: moderatedPrompt });
 }
