@@ -14,6 +14,7 @@ export interface UserSession {
 	username: 	string;
 	email: 		string;
 	verified: 	boolean;
+	role: 		string;
 	admin: 		boolean;
 }
 
@@ -45,6 +46,8 @@ export interface Filter {
 	georange:	number;	
 	minresults:	number;
 }
+
+
 
 export const isVerificationFlow = (response: object): response is VerificationFlow => {
 	return (response as VerificationFlow).ui !== undefined;

@@ -3,6 +3,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { identity } from "$lib/server/auth";
 import { auth } from '$lib/server/auth';
 import { DeleteCookiesByPrefix } from "$lib/utils";
+import { rolenames } from '$lib/gatekeeper.json'; 
 
 
 export const load = (async () => {
@@ -15,6 +16,7 @@ export const load = (async () => {
         return {
             title: 'Admin',
             activeSessions: data,
+			rolenames: rolenames,
         }
     }, ({ response: { data, status } }) => {
         console.log('Kratos list identities error');
@@ -23,6 +25,7 @@ export const load = (async () => {
         return {
             title: 'Admin',
             activeSessions: undefined,
+			rolenames: rolenames,
         };
     })
 }) satisfies PageServerLoad;
@@ -62,5 +65,34 @@ export const actions = {
 					throw error(500, 'Error logging out');
 				}
 			);
+	},
+	changeRole: async ({ request }) => {
+		const values = await request.formData();
+		const id = values.get('id') ?? undefined;
+		const role = values.get('role') ?? undefined;
+		console.log(id);
+		console.log(role);
+		if (typeof id !== 'string' || typeof role !== 'string') {
+			return fail(400, { changeRole: 'Error: id or role missing'});
+		}
+		return await identity.patchIdentity({
+			id: id,
+			jsonPatch: [
+				{
+					op: 'replace',
+					path: '/metadata_public',
+					value: {"role": role},
+				}
+			],
+		}).then(({ data }) => {
+			console.log('Role changed');
+			console.log(data.metadata_public.role);
+			return { changeRole: 'success' }
+		}, ({ response: { data, status } }) => {
+			console.log('Kratos list identities error');
+			console.log(status);
+			console.log(data);
+			return fail(400, { changeRole: 'Error: id or role missing'});
+		});
 	},
 } satisfies Actions;

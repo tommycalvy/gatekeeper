@@ -21,18 +21,24 @@
 		<tbody>
 			{#if data.activeSessions}
 				{#each data.activeSessions as session}
-                    {#if session.active}
-                        <tr>
-                            <th />
-                            <th><ChangeRoleButton admin={session.identity.metadata_public?.admin ?? false} currentRole={session.identity.metadata_public?.role}/></th>
-                            <th>{session.identity.traits.username}</th>
-                            <th>{session.identity.traits.email}</th>
-                            <th>{session.identity.verifiable_addresses?.[0].verified}</th>
-                            <th>{session.identity.metadata_public?.role}</th>
-                            <th>{session.identity.metadata_public?.admin}</th>
-                            <th>{session.authenticated_at}</th>
-                        </tr>
-                    {/if}
+					{#if session.active}
+						<tr>
+							<th />
+							<th
+								><ChangeRoleButton
+									currentRole={session.identity.metadata_public?.role}
+                                    allRoles={data.rolenames}
+                                    id={session.identity.id}
+								/></th
+							>
+							<th>{session.identity.traits.username}</th>
+							<th>{session.identity.traits.email}</th>
+							<th>{session.identity.verifiable_addresses?.[0].verified}</th>
+							<th>{session.identity.metadata_public?.role}</th>
+							<th>{session.identity.metadata_public?.admin ?? false}</th>
+							<th>{session.authenticated_at}</th>
+						</tr>
+					{/if}
 				{/each}
 			{/if}
 		</tbody>
