@@ -1,0 +1,175 @@
+version: v0.10.1
+
+dsn: postgres://ory_user:ory_pass@postgres:5432/ory_data?sslmode=disable&max_conns=20&max_idle_conns=4
+
+serve:
+    public:
+        base_url: http://127.0.0.1:4433/
+        cors:
+            enabled: true
+    admin:
+        base_url: http://kratos:4434
+
+selfservice:
+    default_browser_return_url: http://127.0.0.1:5173
+    allowed_return_urls:
+        - http://127.0.0.1:5173
+
+    methods:
+        password:
+            enabled: true
+
+        link:
+            enabled: true
+
+            config:
+                base_url: http://127.0.0.1:5173
+
+    flows:
+        error:
+            ui_url: http://127.0.0.1:5173/error
+
+        settings:
+            ui_url: http://127.0.0.1:5173/settings
+            privileged_session_max_age: 15m
+
+        recovery:
+            enabled: true
+            ui_url: http://127.0.0.1:5173/recovery
+
+        verification:
+            enabled: true
+            ui_url: http://127.0.0.1:5173/verification
+            after:
+                default_browser_return_url: http://127.0.0.1:5173
+
+        logout:
+            after:
+                default_browser_return_url: http://127.0.0.1:5173
+
+        login:
+            ui_url: http://127.0.0.1:5173/login
+            lifespan: 10m
+
+        registration:
+            lifespan: 10m
+            ui_url: http://127.0.0.1:5173/registration
+            after:
+                password:
+                    hooks:
+                        - hook: session
+
+log:
+    level: debug
+    format: text
+    leak_sensitive_values: true
+
+secrets:
+    default:
+        - lSt1KQ5QPYvjZpefAnSmnZ0jWa3T9u3B1gN0CrzpIwKw59kZss1N8Qj5ctsC4GM+
+    cookie:
+        - 1Ic6t+lNRC4vbBAewnAT0Ddrpfwp4Vygi2WektVRfux5ywPXJhIRNjJnjn3TYRtl
+    cipher:
+        - HzyCpItpr1iomjaG8jVTVqhhhhNlcTDf
+
+ciphers:
+    algorithm: xchacha20-poly1305
+
+hashers:
+    algorithm: bcrypt
+    bcrypt:
+        cost: 8
+
+identity:
+    default_schema_id: user_v0
+    schemas:
+        - id: user_v0
+          url: file:///etc/config/kratos/identity.schema.json
+
+courier:
+    smtp:
+        ## SMTP connection string ##
+        #
+        # This URI will be used to connect to the SMTP server. Use the scheme smtps for implicit TLS sessions or smtp for explicit StartTLS/cleartext sessions. Please note that TLS is always enforced with certificate trust verification by default for security reasons on both schemes. With the smtp scheme you can use the query parameter (`?disable_starttls=true`) to allow cleartext sessions or (`?disable_starttls=false`) to enforce StartTLS (default behaviour). Additionally, use the query parameter to allow (`?skip_ssl_verify=true`) or disallow (`?skip_ssl_verify=false`) self-signed TLS certificates (default behaviour) on both implicit and explicit TLS sessions.
+        #
+        # Examples:
+        # - smtps://foo:bar@my-mailserver:1234/?skip_ssl_verify=false
+        # - "smtp://foo:bar@my-mailserver:1234/?disable_starttls=true (NOT RECOMMENDED:
+        #   Cleartext smtp for devel and legacy infrastructure only)"
+        # - smtp://foo:bar@my-mailserver:1234/ (Explicit StartTLS with certificate trust
+        #   verification)
+        # - "smtp://foo:bar@my-mailserver:1234/?skip_ssl_verify=true (NOT RECOMMENDED:
+        #   Explicit StartTLS without certificate trust verification)"
+        # - smtps://foo:bar@my-mailserver:1234/ (Implicit TLS with certificate trust
+        #   verification)
+        # - "smtps://foo:bar@my-mailserver:1234/?skip_ssl_verify=true (NOT RECOMMENDED:
+        #   Implicit TLS without certificate trust verification)"
+        # - smtps://subdomain.my-mailserver:1234/?server_name=my-mailserver (allows TLS to
+        #   work if the server is hosted on a sudomain that uses a non-wildcard domain
+        #   certificate)
+        # 
+        # Set this value using environment variables on
+        # - Linux/macOS:
+        #    $ export COURIER_SMTP_CONNECTION_URI=<value>
+        # - Windows Command Line (CMD):
+        #    > set COURIER_SMTP_CONNECTION_URI=<value>
+        #
+        connection_uri: "smtp://"
+
+        ## SMTP Sender Address ##
+        #
+        # The recipient of an email will see this as the sender address.
+        #
+        # Default value: no-reply@ory.kratos.sh
+        #
+        # Set this value using environment variables on
+        # - Linux/macOS:
+        #    $ export COURIER_SMTP_FROM_ADDRESS=<value>
+        # - Windows Command Line (CMD):
+        #    > set COURIER_SMTP_FROM_ADDRESS=<value>
+        #
+        from_address: "email@gmail.com"
+
+        ## SMTP Sender Name ##
+        #
+        # The recipient of an email will see this as the sender name.
+        #
+        # Examples:
+        # - Bob
+        # 
+        # Set this value using environment variables on
+        # - Linux/macOS:
+        #    $ export COURIER_SMTP_FROM_NAME=<value>
+        # - Windows Command Line (CMD):
+        #    > set COURIER_SMTP_FROM_NAME=<value>
+        #
+        from_name: "Demarcait"
+
+        headers:
+            ## X-SES-SOURCE-ARN ##
+            #
+            # Set this value using environment variables on
+            # - Linux/macOS:
+            #    $ export COURIER_SMTP_HEADERS_X-SES-SOURCE-ARN=<value>
+            # - Windows Command Line (CMD):
+            #    > set COURIER_SMTP_HEADERS_X-SES-SOURCE-ARN=<value>
+            #
+            X-SES-SOURCE-ARN: 
+            ## X-SES-FROM-ARN ##
+            #
+            # Set this value using environment variables on
+            # - Linux/macOS:
+            #    $ export COURIER_SMTP_HEADERS_X-SES-FROM-ARN=<value>
+            # - Windows Command Line (CMD):
+            #    > set COURIER_SMTP_HEADERS_X-SES-FROM-ARN=<value>
+            #
+            X-SES-FROM-ARN: 
+            ## X-SES-RETURN-PATH-ARN ##
+            #
+            # Set this value using environment variables on
+            # - Linux/macOS:
+            #    $ export COURIER_SMTP_HEADERS_X-SES-RETURN-PATH-ARN=<value>
+            # - Windows Command Line (CMD):
+            #    > set COURIER_SMTP_HEADERS_X-SES-RETURN-PATH-ARN=<value>
+            #
+            X-SES-RETURN-PATH-ARN: 

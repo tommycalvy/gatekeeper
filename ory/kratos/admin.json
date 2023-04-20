@@ -1,0 +1,26 @@
+{
+    "schema_id": "user_v0",
+    "traits": {
+        "username": "hellomynameisjohn",
+        "email": "john@gmail.com"
+    },
+    "verifiable_addresses": [
+        {
+            "value": "john@gmail.com",
+            "verified": true,
+            "via": "email",
+            "status": "completed"
+        }
+    ],
+    "credentials": {
+        "password": {
+            "config": {
+                "password": "johnisawesome69420"
+            }
+        }
+    },
+    "metadata_public": {
+        "admin": true,
+        "role": "employee"
+    }
+}
