@@ -11,13 +11,13 @@ import type {
 } from '@ory/kratos-client';
 import { redirect, fail } from '@sveltejs/kit';
 import { DeleteCookiesByPrefix, GetCookieByPrefix, SetCookies } from '$lib/utils';
-import { CHATBOT_ENDPOINT_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 export const load = (async ({ locals }) => {
 	return {
         userSession: locals.userSession,
         title: 'Home',
-        chatbotEndpointUrl: CHATBOT_ENDPOINT_URL,
+        chatbotEndpointUrl: env.CHATBOT_ENDPOINT_URL,
     };
 }) satisfies PageServerLoad;
 

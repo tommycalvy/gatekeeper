@@ -1,8 +1,8 @@
-import { CHATBOT_ENDPOINT_URL } from "$env/static/private";
+import { env } from "$env/dynamic/private";
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET({ url, fetch}) {
-	const response = await fetch(CHATBOT_ENDPOINT_URL + url.pathname);
+	const response = await fetch(env.CHATBOT_ENDPOINT_URL + url.pathname);
     const chatui = response.body;
     //const data = await response.
     console.log('------------------------------------');

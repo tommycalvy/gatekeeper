@@ -17,7 +17,9 @@ export const handle = (async ({ event, resolve }) => {
 					admin: identity.metadata_public?.admin ?? false
 				};
 			},
-			({ response }) => {
+			(error) => {
+				console.log(error);
+				/*
 				event.locals.userSession = undefined;
 				if (response.status === 401) {
 					console.log('User has cookies but is not authenticated');
@@ -26,6 +28,7 @@ export const handle = (async ({ event, resolve }) => {
 					console.log(err);
 					console.log(response);
 				}
+				*/
 			}
 		);
 	} else {
