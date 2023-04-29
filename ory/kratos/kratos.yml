@@ -114,7 +114,20 @@ courier:
         # - Windows Command Line (CMD):
         #    > set COURIER_SMTP_CONNECTION_URI=<value>
         #
-        connection_uri: "smtp://"
+        # Forefinder
+        # decoded = smtps://AKIARFIVP4KLCDB3TNGW:BEScr+5TNWgStubA7kW9EZO/gVAKArlHofSULxZ8z96E@email-smtp.us-east-2.amazonaws.com:465/
+        # username base64 encoded = QUtJQVJGSVZQNEtMQ0RCM1ROR1c=
+        # password base64 encoded = QkVTY3IrNVROV2dTdHViQTdrVzlFWk8vZ1ZBS0FybEhvZlNVTHhaOHo5NkU=
+
+        # SMLTOWN
+        # SMTP Username: AKIARFIVP4KLMGCZGF4D
+        # SMTP Password: BKb3hrLJtELEiwMdDObQrjW1ZU2esQ+GFz8cBVwkfY+E
+        #
+        # smtp://{smtp-user}:{smtp-password}@email-smtp.{region}.amazonaws.com:587/
+        # For example:
+        # smtp://theuser:the-password@email-smtp.eu-central-1.amazonaws.com:587/
+        #
+        connection_uri: smtp://AKIARFIVP4KLMGCZGF4D:BKb3hrLJtELEiwMdDObQrjW1ZU2esQ+GFz8cBVwkfY+E@email-smtp.us-east-1.amazonaws.com:587/
 
         ## SMTP Sender Address ##
         #
@@ -128,7 +141,7 @@ courier:
         # - Windows Command Line (CMD):
         #    > set COURIER_SMTP_FROM_ADDRESS=<value>
         #
-        from_address: "email@gmail.com"
+        from_address: "tommy@sml.town"
 
         ## SMTP Sender Name ##
         #
@@ -143,7 +156,7 @@ courier:
         # - Windows Command Line (CMD):
         #    > set COURIER_SMTP_FROM_NAME=<value>
         #
-        from_name: "Demarcait"
+        from_name: "GATEKEEPER"
 
         headers:
             ## X-SES-SOURCE-ARN ##
@@ -154,7 +167,7 @@ courier:
             # - Windows Command Line (CMD):
             #    > set COURIER_SMTP_HEADERS_X-SES-SOURCE-ARN=<value>
             #
-            X-SES-SOURCE-ARN: 
+            X-SES-SOURCE-ARN: arn:aws:ses:us-east-1:080038847126:identity/tommy@sml.town
             ## X-SES-FROM-ARN ##
             #
             # Set this value using environment variables on
@@ -163,7 +176,8 @@ courier:
             # - Windows Command Line (CMD):
             #    > set COURIER_SMTP_HEADERS_X-SES-FROM-ARN=<value>
             #
-            X-SES-FROM-ARN: 
+            X-SES-FROM-ARN: arn:aws:ses:us-east-1:080038847126:identity/tommy@sml.town
+
             ## X-SES-RETURN-PATH-ARN ##
             #
             # Set this value using environment variables on
@@ -172,4 +186,4 @@ courier:
             # - Windows Command Line (CMD):
             #    > set COURIER_SMTP_HEADERS_X-SES-RETURN-PATH-ARN=<value>
             #
-            X-SES-RETURN-PATH-ARN: 
+            X-SES-RETURN-PATH-ARN: arn:aws:ses:us-east-1:080038847126:identity/tommy@sml.town
