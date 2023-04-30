@@ -4,9 +4,15 @@ services:
         image: chatgpt-ui:latest
         restart: unless-stopped
         environment:
-            OPENAI_API_HOST: "http://localhost:8000"
+            OPENAI_API_HOST: "http://vicuna:8000"
         ports:
             - 3000:3000
     vicuna:
+        image: llama-server:latest
+        restart: unless-stopped
+        environment:
+            MODEL: "./llama.cpp/models/ggml-vic7b-q4_0.bin"
+        ports:
+            - 8000:8000
 
 
