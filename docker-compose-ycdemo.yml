@@ -1,0 +1,85 @@
+version: "3.8"
+services:
+    postgres:
+        image: postgres
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: "ory_user"
+            POSTGRES_PASSWORD: "ory_pass"
+            POSTGRES_DB: "ory_data"
+        logging:
+          options:
+            max-size: 10m
+            max-file: "3"
+        ports:
+          - '5432:5432'
+        volumes:
+          - ./ory/postgres-data:/var/lib/postgresql/data
+          # copy the sql script to create tables
+          # - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    kratos-migrate:
+        depends_on:
+            - postgres
+        image: oryd/kratos:v0.11.1
+        restart: on-failure
+        command: migrate -c /etc/config/kratos/kratos.yml sql -e --yes
+        volumes:
+            -
+                type: bind
+                source: ./ory/kratos
+                target: /etc/config/kratos
+    kratos:
+        depends_on:
+            - kratos-migrate
+        image: oryd/kratos:v0.11.1
+        restart: unless-stopped
+        command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+        volumes:
+            -
+                type: bind
+                source: ./ory/kratos
+                target: /etc/config/kratos
+        ports:
+            - 4433:4433
+            - 4434:4434
+    kratos-import:
+        depends_on:
+            - kratos
+        image: oryd/kratos:v0.11.1
+        restart: "no"
+        entrypoint: ["/bin/sh","-c"]
+        command: 
+            - |
+              sleep 30
+              kratos import identities /etc/config/kratos/admin.json --endpoint http://kratos:4434
+        volumes:
+            -
+                type: bind
+                source: ./ory/kratos
+                target: /etc/config/kratos
+    sveltekit:
+        depends_on:
+            - kratos-import
+        build:
+            context: ./sveltekit
+            dockerfile: dev.Dockerfile
+        ports:
+            - 5173:5173
+            - 24678:24678
+        volumes:
+            - ./sveltekit/src:/home/node/app/src
+            - ./sveltekit/static:/home/node/app/static
+            - ./sveltekit/tests:/home/node/app/tests
+            - ./sveltekit/jsconfig.json:/app/jsconfig.json
+            - ./sveltekit/playwright.config.js:/home/node/app/playwright.config.js
+            - ./sveltekit/postcss.config.js:/home/node/app/postcss.config.js
+            - ./sveltekit/svelte.config.js:/home/node/app/svelte.config.js
+            - ./sveltekit/tailwind.config.cjs:/home/node/app/tailwind.config.cjs
+            - ./sveltekit/vite.config.js:/home/node/app/vite.config.js
+        command: npm run dev
+        environment:
+            - PORT=5173
+            - KRATOS_PUBLIC_URL=http://kratos:4433
+            - KRATOS_ADMIN_URL=http://kratos:4434
+            - CRUD_SERVICE_URL=http://crud_service:5656
+            - CHATBOT_ENDPOINT_URL=http://localhost:3001
