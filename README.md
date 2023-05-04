@@ -1,6 +1,6 @@
 Demarcait's Gatekeeper
 =====================
-The Enterprise UI for your chatbots. 
+The Self Hosted Enterprise Chatbot
 
 Work in progress...  
 
@@ -13,6 +13,8 @@ Upcoming Features:
 - Regulate response from chatbots
 
 
-For Dev Environment run:  
-docker compose up --build -V  
-open browser to localhost:5173  
+Download a llama model compatible with llama.cpp and put it in the models folder.
+Make sure the environment variable `MODEL` and `MODEL_PATH` are set to the relative path of the model.
+
+Then simply:
+`docker compose up`

@@ -1,23 +1,26 @@
 version: "3.8"
 services:
     chatbot-ui:
-        image: chatgpt-ui:latest
+        build: ./chatbot-ui
         restart: unless-stopped
         environment:
-            OPENAI_API_HOST: "http://vicuna:8000"
+            OPENAI_API_HOST: "http://vicuna-server:8000"
+            MODEL_PATH: "./models/ggml-vic7b-q4_0.bin"
+            MODEL_NAME: "Vicuna"
+            NEXT_PUBLIC_DEFAULT_SYSTEM_PROMPT: "You are a friendly chatbot. Follow the user's instructions carefully. Respond using markdown."
         ports:
             - 3000:3000
-    vicuna:
-        image: llama-server:latest
+    vicuna-server:
+        build: ./vicuna-server
         restart: unless-stopped
         environment:
-            MODEL: "./llama.cpp/models/ggml-vic7b-q4_0.bin"
+            MODEL: "./models/ggml-vic7b-q4_0.bin"
             HOST: "0.0.0.0"
             PORT: "8000"
         ports:
             - 8000:8000
         volumes:
-            - ./llama.cpp/models/ggml-vic7b-q4_0.bin:/llama.cpp/models/ggml-vic7b-q4_0.bin
+            - ./models:/models
         deploy:
             resources:
                 limits:
