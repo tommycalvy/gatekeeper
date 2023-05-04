@@ -14,7 +14,7 @@ Upcoming Features:
 
 
 Download a llama model compatible with llama.cpp and put it in the models folder.
-Make sure the environment variable `MODEL` and `MODEL_PATH` are set to the relative path of the model.
+Make sure the environment variable `MODEL` and `MODEL_PATH` in the docker-compose.yml file are set to the relative path of the model.
 
 Then simply:
 `docker compose up`
