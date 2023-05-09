@@ -1,0 +1,3 @@
+[submodule "chatbot-ui"]
+	path = chatbot-ui
+	url = https://github.com/tommycalvy/chatbot-ui.git
