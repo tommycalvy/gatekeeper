@@ -27,3 +27,7 @@ https://huggingface.co/eachadea/ggml-vicuna-13b-1.1
 
 Then simply:
 `docker compose up`
+
+You may have to wait a little while for the vicuna-server application to startup because the model has to be loaded into memory first.
+
+Then go to localhost:3000 to access the chatbot interface.
