@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "post",
+    srcs = [
+        "dynamo_repository.go",
+        "filter_service_repository.go",
+        "post.go",
+    ],
+    importpath = "github.com/tommycalvy/smltown/crud_service/post",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//protos:go_protos",
+        "@com_github_aws_aws_sdk_go_v2//aws",
+        "@com_github_aws_aws_sdk_go_v2_config//:config",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//:dynamodb",
+        "@com_github_aws_aws_sdk_go_v2_service_dynamodb//types",
+        "@org_golang_google_grpc//:go_default_library",
+        "@org_golang_google_grpc//credentials/insecure",
+    ],
+)
