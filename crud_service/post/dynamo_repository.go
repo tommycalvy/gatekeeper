@@ -23,40 +23,13 @@ func NewDynamoPostRepo(tableName string) DynamoRepository {
     if err != nil {
         log.Printf("unable to load SDK config, %v", err)
     }
-
     // Using the Config value, create the DynamoDB client
     dynamo := dynamodb.NewFromConfig(cfg)
-
 	return &dynamoRepo{
 		Dynamo:		dynamo,
 		TableName:  tableName,
 	}
 }
-
-/*
-func NewDynamoPostRepo(tableName string, dynamoDBEndpoint string) DynamoRepository {
-	cfg, err := config.LoadDefaultConfig(context.TODO(),
-		// CHANGE THIS TO us-east-1 TO USE AWS proper
-		config.WithRegion("localhost"),
-		// Comment the below out if not using localhost
-		config.WithEndpointResolver(aws.EndpointResolverFunc(
-			func(service, region string) (aws.Endpoint, error) {
-				return aws.Endpoint{URL: dynamoDBEndpoint, SigningRegion: "localhost"}, nil 
-			})),
-	)
-    if err != nil {
-        log.Printf("unable to load SDK config, %v", err)
-    }
-
-    // Using the Config value, create the DynamoDB client
-    dynamo := dynamodb.NewFromConfig(cfg)
-
-	return &dynamoRepo{
-		Dynamo:		dynamo,
-		TableName:  tableName,
-	}
-}
-*/
 
 func (r *dynamoRepo) CreatePost(ctx context.Context, p Post) error {
 	log.Printf("Username=%v", p.Username)
@@ -68,7 +41,6 @@ func (r *dynamoRepo) CreatePost(ctx context.Context, p Post) error {
 	log.Printf("Latitude=%v", p.Latitude)
 	log.Printf("Longitude=%v", p.Longitude)
 	log.Printf("Votes=%v", p.Votes)
-	
 	input := &dynamodb.PutItemInput{
 		TableName: aws.String(r.TableName),
 		Item: map[string]types.AttributeValue {
@@ -88,7 +60,6 @@ func (r *dynamoRepo) CreatePost(ctx context.Context, p Post) error {
 		log.Printf("Got error calling PutItem: %s", err)
 		return ErrRepo
 	}
-
 	return nil
 }
 
@@ -106,6 +77,7 @@ func (r *dynamoRepo) DeletePost(ctx context.Context, id PostID) error {
 	}
 	return nil
 }
+
 
 func (r *dynamoRepo) GetPostsFromIDs(ctx context.Context, postIDs []PostID) ([]Post, error) {
 	keys := make([]map[string]types.AttributeValue, len(postIDs))
@@ -127,9 +99,7 @@ func (r *dynamoRepo) GetPostsFromIDs(ctx context.Context, postIDs []PostID) ([]P
 		log.Printf("Got error calling BatchGetItem: %s", err)
 		return nil, ErrRepo
 	}
-
 	posts := make([]Post, len(out.Responses[r.TableName]))
-
 	if len(out.Responses[r.TableName]) == 0 {
 		return nil, ErrNotFound
 	}

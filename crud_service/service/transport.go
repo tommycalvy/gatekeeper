@@ -26,16 +26,11 @@ func MakeHTTPHandler(s Service, logger log.Logger) http.Handler {
 		httptransport.ServerErrorHandler(transport.NewLogErrorHandler(logger)),
 		httptransport.ServerErrorEncoder(encodeError),
 	}
-
 	// POST 	/users/v0/ 								adds another user
 	// GET 		/users/v0/username/:username 			get user by username
 	// GET 		/users/v0/email/:email 					get user by email
-
 	// POST		/posts/v0/								creates a post
-
-	// GET 		/profiles/v0/distance/:cc/:pc/:miles	finds profiles within a certain mile radius around a lat, lon
-	
-	
+	// POST		/posts/v0/gethotpostsnearme				gets hot posts near me
 	r.Methods("POST").Path("/users/v0/").Handler(httptransport.NewServer(
 		e.CreateUserEndpoint,
 		decodeCreateUserRequest,
@@ -66,7 +61,6 @@ func MakeHTTPHandler(s Service, logger log.Logger) http.Handler {
 		encodeResponse,
 		options...,
 	))
-	
 	return r 
 }
 

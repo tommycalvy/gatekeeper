@@ -29,8 +29,8 @@ func NewService(users user.Repository, dynamoPosts post.DynamoRepository, filter
 		filterServicePosts: filterServicePosts,
 	}
 }
+
 func (s *service) CreateUser(ctx context.Context, u user.User) error {
-	
 	if err := s.users.CreateUser(ctx, u); err != nil {
 		return err
 	}
@@ -65,7 +65,6 @@ func (s *service) CreatePost(ctx context.Context, p post.Post) error {
 		s.dynamoPosts.DeletePost(ctx, id)
 		return err
 	}
-
 	return nil
 }
 
